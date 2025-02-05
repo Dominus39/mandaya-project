@@ -42,10 +42,11 @@ func main() {
 
 	private := e.Group("")
 	private.Use(internal.CustomJwtMiddleware)
+	private.POST("/rooms/booking", handler.BookRoom)
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8081"
 	}
 
 	fmt.Println("Server running on port:", port)
