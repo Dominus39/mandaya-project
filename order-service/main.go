@@ -1,10 +1,9 @@
 package main
 
 import (
-	"user-service/config"
-	"user-service/internal/handler"
-
-	//"user-service/internal/middleware"
+	"order-service/config"
+	"order-service/internal/handler"
+	internal "order-service/internal/middleware"
 
 	"log"
 
@@ -19,10 +18,10 @@ import (
 	echoswagger "github.com/swaggo/echo-swagger"
 )
 
-// @title mandaya project API user-service
+// @title mandaya project API order-service
 // @version 1.0
 // @description system booking hotels
-// @host localhost:8080
+// @host localhost:8081
 // @BasePath /
 func main() {
 	err := godotenv.Load()
@@ -39,8 +38,10 @@ func main() {
 	e.Use(middleware.Recover())
 
 	public := e.Group("")
-	public.POST("/users/register", handler.Register)
-	public.POST("/users/login", handler.LoginUser)
+	public.GET("/rooms", handler.GetRooms)
+
+	private := e.Group("")
+	private.Use(internal.CustomJwtMiddleware)
 
 	port := os.Getenv("PORT")
 	if port == "" {
