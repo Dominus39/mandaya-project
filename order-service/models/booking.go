@@ -10,5 +10,6 @@ type Booking struct {
 	StartDate  time.Time `json:"start_date" gorm:"not null"`
 	EndDate    time.Time `json:"end_date" gorm:"not null"`
 	TotalPrice float64   `json:"total_price" gorm:"not null"`
+	IsPaid     bool      `json:"is_paid" gorm:"not null;default:false"`
 	CreatedAt  time.Time `json:"created_at" gorm:"autoCreateTime"`
 }

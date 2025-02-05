@@ -42,6 +42,7 @@ func main() {
 
 	private := e.Group("")
 	private.Use(internal.CustomJwtMiddleware)
+	private.GET("/rooms/users", handler.GetUserRooms)
 	private.POST("/rooms/booking", handler.BookRoom)
 
 	port := os.Getenv("PORT")
