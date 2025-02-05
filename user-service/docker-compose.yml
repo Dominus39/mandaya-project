@@ -1,0 +1,9 @@
+services:
+  user-service:
+    build: .
+    container_name: user-service
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: always
