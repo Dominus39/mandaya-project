@@ -20,13 +20,11 @@ import (
 // @Router /rooms [get]
 func GetRooms(c echo.Context) error {
 	var rooms []models.Room
-	// Query all rooms with their category info and stock status
 	err := config.DB.Preload("Category").Find(&rooms).Error
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Error fetching rooms"})
 	}
 
-	// Prepare a response structure with only required fields
 	roomResponses := []dto.RoomResponse{}
 	for _, room := range rooms {
 		roomResponses = append(roomResponses, dto.RoomResponse{

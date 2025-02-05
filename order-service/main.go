@@ -44,6 +44,7 @@ func main() {
 	private.Use(internal.CustomJwtMiddleware)
 	private.GET("/rooms/users", handler.GetUserRooms)
 	private.POST("/rooms/booking", handler.BookRoom)
+	private.DELETE("/rooms/cancel/:id", handler.CancelBooking)
 
 	port := os.Getenv("PORT")
 	if port == "" {
