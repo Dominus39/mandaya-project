@@ -36,7 +36,7 @@ func CreateUser(name, email, password string) (int, error) {
 // @Failure 500 {object} map[string]interface{} "Register Failed"
 // @Router /users/register [post]
 func Register(c echo.Context) error {
-	var req dto.RegisterUser
+	var req dto.RegisterRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid Request Parameters"})
 	}
@@ -47,7 +47,6 @@ func Register(c echo.Context) error {
 	if req.Email == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Email is required"})
 	}
-
 	if req.Password == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Password is required"})
 	}

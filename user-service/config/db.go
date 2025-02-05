@@ -8,12 +8,11 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
 
-func InitDB() (*gorm.DB, error) {
+func InitDB() {
 	// deploy database online using supabase.com
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("DB_HOST"),
@@ -23,12 +22,11 @@ func InitDB() (*gorm.DB, error) {
 		os.Getenv("DB_PORT"),
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 
-	return db, nil
+	log.Println("Database connected successfully.")
 }
