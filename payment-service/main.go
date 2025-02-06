@@ -20,8 +20,8 @@ import (
 
 // @title mandaya project API order-service
 // @version 1.0
-// @description system booking hotels
-// @host localhost:8081
+// @description system booking mandaya hotels
+// @host localhost:8082
 // @BasePath /
 func main() {
 	err := godotenv.Load()

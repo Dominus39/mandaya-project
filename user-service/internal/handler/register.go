@@ -30,7 +30,7 @@ func CreateUser(name, email, password string) (int, error) {
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param register body entity.RegisterUser true "Register User"
+// @Param register body dto.RegisterRequest true "Register User"
 // @Success 200 {object} map[string]interface{} "Success message and user details"
 // @Failure 400 {object} map[string]interface{} "Invalid Request Parameters"
 // @Failure 500 {object} map[string]interface{} "Register Failed"

@@ -15,7 +15,7 @@ import (
 // @Tags Rooms
 // @Accept json
 // @Produce json
-// @Success 200 {array} entity.RoomResponse "List of rooms"
+// @Success 200 {array} dto.RoomResponse "List of rooms"
 // @Failure 500 {object} map[string]string "Internal server error"
 // @Router /rooms [get]
 func GetRooms(c echo.Context) error {

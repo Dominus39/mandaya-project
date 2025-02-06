@@ -18,8 +18,8 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param login body entity.LoginRequest true "Login User"
-// @Success 200 {object} entity.LoginResponse
+// @Param login body dto.LoginRequest true "Login User"
+// @Success 200 {object} dto.LoginResponse
 // @Failure 400 {object} map[string]interface{} "Invalid Request Parameters"
 // @Failure 401 {object} map[string]interface{} "Invalid Email"
 // @Failure 401 {object} map[string]interface{} "Invalid Password"

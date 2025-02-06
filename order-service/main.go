@@ -20,7 +20,7 @@ import (
 
 // @title mandaya project API order-service
 // @version 1.0
-// @description system booking hotels
+// @description system booking mandaya hotels
 // @host localhost:8081
 // @BasePath /
 func main() {

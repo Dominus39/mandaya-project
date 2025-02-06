@@ -5,8 +5,6 @@ import (
 	"user-service/internal/handler"
 	internal "user-service/internal/middleware"
 
-	//"user-service/internal/middleware"
-
 	"log"
 
 	"github.com/labstack/echo/v4"
@@ -22,7 +20,7 @@ import (
 
 // @title mandaya project API user-service
 // @version 1.0
-// @description system booking hotels
+// @description system booking mandaya hotels
 // @host localhost:8080
 // @BasePath /
 func main() {
