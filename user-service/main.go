@@ -42,6 +42,10 @@ func main() {
 	public.POST("/users/register", handler.Register)
 	public.POST("/users/login", handler.LoginUser)
 
+	service := e.Group("")
+	service.GET("/get_user/:id", handler.GetUser)
+	service.POST("/update_balance/:id", handler.UpdateUserBalance)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

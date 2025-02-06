@@ -1,9 +1,9 @@
 package main
 
 import (
-	"order-service/config"
-	"order-service/internal/handler"
-	internal "order-service/internal/middleware"
+	"payment-service/config"
+	"payment-service/internal/handler"
+	internal "payment-service/internal/middleware"
 
 	"log"
 
@@ -37,21 +37,13 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	public := e.Group("")
-	public.GET("/rooms", handler.GetRooms)
-
 	private := e.Group("")
 	private.Use(internal.CustomJwtMiddleware)
-	private.GET("/rooms/users", handler.GetUserRooms)
-	private.POST("/rooms/booking", handler.BookRoom)
-	private.DELETE("/rooms/cancel/:id", handler.CancelBooking)
-
-	private.GET("/get_booking/:id", handler.GetBooking)
-	private.GET("/update_payment_status/:id", handler.UpdatePaymentStatus)
+	private.POST("/rooms/payment/:id", handler.PayBooking)
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8081"
+		port = "8082"
 	}
 
 	fmt.Println("Server running on port:", port)
