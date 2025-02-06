@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/rooms/payment/{id}": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Pay the total price of a booking with the user's balance and mark it as paid.",
                 "consumes": [
                     "application/json"
@@ -29,6 +34,13 @@ const docTemplate = `{
                 ],
                 "summary": "Pay for a booking",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Booking ID",
@@ -47,6 +59,22 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Insufficient balance or invalid request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden access",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -84,7 +112,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8082",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "mandaya project API order-service",
+	Title:            "mandaya project API payment-service",
 	Description:      "system booking mandaya hotels",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

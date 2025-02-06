@@ -28,6 +28,13 @@ definitions:
     - name
     - password
     type: object
+  dto.TopUpRequest:
+    properties:
+      amount:
+        type: number
+    required:
+    - amount
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -105,4 +112,52 @@ paths:
       summary: Register a new user
       tags:
       - Users
+  /users/topup:
+    post:
+      consumes:
+      - application/json
+      description: Allows authenticated users to top up their balance by creating
+        an invoice via the payment service.
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Top-up request payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TopUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with invoice details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Top up user balance
+      tags:
+      - User
 swagger: "2.0"

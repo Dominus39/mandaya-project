@@ -3,7 +3,7 @@ host: localhost:8082
 info:
   contact: {}
   description: system booking mandaya hotels
-  title: mandaya project API order-service
+  title: mandaya project API payment-service
   version: "1.0"
 paths:
   /rooms/payment/{id}:
@@ -13,6 +13,11 @@ paths:
       description: Pay the total price of a booking with the user's balance and mark
         it as paid.
       parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Booking ID
         in: path
         name: id
@@ -32,6 +37,17 @@ paths:
             additionalProperties:
               type: string
             type: object
+        "401":
+          description: Unauthorized access
+          schema:
+            additionalProperties: true
+            type: object
+        "403":
+          description: Forbidden access
+          schema:
+            additionalProperties:
+              type: string
+            type: object
         "404":
           description: Booking not found
           schema:
@@ -44,6 +60,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Pay for a booking
       tags:
       - Payments

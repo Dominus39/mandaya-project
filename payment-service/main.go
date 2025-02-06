@@ -18,7 +18,7 @@ import (
 	echoswagger "github.com/swaggo/echo-swagger"
 )
 
-// @title mandaya project API order-service
+// @title mandaya project API payment-service
 // @version 1.0
 // @description system booking mandaya hotels
 // @host localhost:8082

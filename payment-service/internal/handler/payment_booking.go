@@ -24,9 +24,13 @@ import (
 // @Tags Payments
 // @Accept json
 // @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer Token"
 // @Param id path int true "Booking ID"
 // @Success 200 {object} map[string]interface{} "Payment successful"
 // @Failure 400 {object} map[string]string "Insufficient balance or invalid request"
+// @Failure 401 {object} map[string]interface{} "Unauthorized access"
+// @Failure 403 {object} map[string]string "Forbidden access"
 // @Failure 404 {object} map[string]string "Booking not found"
 // @Failure 500 {object} map[string]string "Payment failed"
 // @Router /rooms/payment/{id} [post]

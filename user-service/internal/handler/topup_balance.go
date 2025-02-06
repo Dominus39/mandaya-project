@@ -11,6 +11,21 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TopUpBalance handles the top-up balance request.
+//
+// @Summary Top up user balance
+// @Description Allows authenticated users to top up their balance by creating an invoice via the payment service.
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer Token"
+// @Param request body dto.TopUpRequest true "Top-up request payload"
+// @Success 200 {object} map[string]interface{} "Successful response with invoice details"
+// @Failure 400 {object} map[string]string "Invalid request parameters"
+// @Failure 401 {object} map[string]interface{} "Unauthorized access"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /users/topup [post]
 func TopUpBalance(c echo.Context) error {
 	user := c.Get("user")
 	if user == nil {
