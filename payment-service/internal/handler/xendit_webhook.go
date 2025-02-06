@@ -41,7 +41,7 @@ func XenditWebhook(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, map[string]string{"message": "Invoice not found"})
 	}
 
-	userServiceURL := fmt.Sprintf("http://localhost:8080/update_balance/%d", webhookData.UserID)
+	userServiceURL := fmt.Sprintf("http://user-service/update_balance/%d", webhookData.UserID)
 	payload := map[string]float64{
 		"amount": webhookData.Amount,
 	}

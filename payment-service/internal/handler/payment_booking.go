@@ -54,7 +54,7 @@ func PayBooking(c echo.Context) error {
 
 	tx := config.DB.Begin()
 
-	orderServiceURL := fmt.Sprintf("http://localhost:8081/get_booking/%d", bookingID)
+	orderServiceURL := fmt.Sprintf("http://order-service:8081/get_booking/%d", bookingID)
 
 	headers := map[string]string{
 		"Authorization": c.Request().Header.Get("Authorization"),
@@ -90,7 +90,7 @@ func PayBooking(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Booking is already paid"})
 	}
 
-	userServiceURL := fmt.Sprintf("http://localhost:8080/get_user/%d", userID)
+	userServiceURL := fmt.Sprintf("http://user-service:8080/get_user/%d", userID)
 	userRes, err := utils.RequestGET(userServiceURL, headers)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to fetch user details"})
@@ -107,7 +107,7 @@ func PayBooking(c echo.Context) error {
 	}
 
 	// Deduct the total price from the user's balance
-	updateBalanceURL := fmt.Sprintf("http://localhost:8080/update_balance/%d", userID)
+	updateBalanceURL := fmt.Sprintf("http://user-service:8080/update_balance/%d", userID)
 	updatePayload := map[string]float64{"amount": -booking.TotalPrice}
 
 	jsonData, err := json.Marshal(updatePayload)
@@ -143,7 +143,7 @@ func PayBooking(c echo.Context) error {
 		}
 	}
 
-	updatePaymentStatusURL := fmt.Sprintf("http://localhost:8081/update_payment_status/%d", booking.BookingID)
+	updatePaymentStatusURL := fmt.Sprintf("http://order-service:8081/update_payment_status/%d", booking.BookingID)
 
 	_, err = utils.RequestGET(updatePaymentStatusURL, headers)
 	if err != nil {
