@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"order-service/config"
 	"order-service/models"
+	"order-service/utils"
 	"strconv"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -56,31 +60,35 @@ func CancelBooking(c echo.Context) error {
 
 	var refundAmount float64
 	if booking.IsPaid {
-		var payment models.PaymentForBooking
-		if err := config.DB.Where("booking_id = ?", booking.ID).First(&payment).Error; err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Payment record not found"})
+		paymentServiceURL := fmt.Sprintf("http://payment-service:8082/get_price/%d", bookingID)
+		headers := map[string]string{"Content-Type": "application/json"}
+
+		respBody, err := utils.RequestGET(paymentServiceURL, headers)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to get booking price"})
 		}
 
-		// Refund the payment to the user
-		// var userAcc entity.User
-		// if err := config.DB.First(&userAcc, userID).Error; err != nil {
-		// 	return c.JSON(http.StatusInternalServerError, map[string]string{"message": "User not found"})
-		// }
+		var paymentResponse struct {
+			Price float64 `json:"price"`
+		}
+		if err := json.Unmarshal(respBody, &paymentResponse); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to parse payment response"})
+		}
+		refundAmount = paymentResponse.Price
 
-		// Refund the total price to the user's balance
-		// userAcc.Balance += payment.Amount
-		// refundAmount = payment.Amount
-		// if err := config.DB.Save(&userAcc).Error; err != nil {
-		// 	return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to refund user balance"})
-		// }
+		userServiceURL := fmt.Sprintf("http://user-service:8080/update_balance/%d", userID)
+		payload := map[string]float64{"amount": refundAmount}
+		jsonData, _ := json.Marshal(payload)
+
+		_, err = utils.RequestPOST(userServiceURL, headers, bytes.NewBuffer(jsonData))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to update user balance"})
+		}
 
 		booking.IsPaid = false
 		if err := config.DB.Save(&booking).Error; err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to update booking status"})
 		}
-		// if err := config.DB.Delete(&payment).Error; err != nil {
-		// 	return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to delete payment record"})
-		// }
 	}
 
 	if err := config.DB.Delete(&booking).Error; err != nil {

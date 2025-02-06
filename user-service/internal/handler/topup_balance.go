@@ -12,7 +12,6 @@ import (
 )
 
 func TopUpBalance(c echo.Context) error {
-	// Extract user claims from JWT
 	user := c.Get("user")
 	if user == nil {
 		return c.JSON(http.StatusUnauthorized, map[string]interface{}{"message": "Unauthorized access"})
@@ -29,7 +28,6 @@ func TopUpBalance(c echo.Context) error {
 	}
 	userID := int(userIDFloat)
 
-	// Bind request
 	var req dto.TopUpRequest
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request parameters"})
@@ -39,7 +37,6 @@ func TopUpBalance(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Amount must be greater than zero"})
 	}
 
-	// Call payment-service to create an invoice
 	paymentServiceURL := "http://localhost:8082/create_invoice"
 	payload := map[string]interface{}{
 		"user_id": userID,
@@ -50,24 +47,20 @@ func TopUpBalance(c echo.Context) error {
 		"Content-Type":  "application/json",
 	}
 
-	// Convert payload to JSON
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to encode request"})
 	}
 
-	// Send request to payment-service
 	respBody, err := utils.RequestPOST(paymentServiceURL, headers, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to create invoice"})
 	}
 
-	// Parse the response from payment-service
 	var resData map[string]interface{}
 	if err := json.Unmarshal(respBody, &resData); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to parse response"})
 	}
 
-	// Return invoice details to the user
 	return c.JSON(http.StatusOK, resData)
 }

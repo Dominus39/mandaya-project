@@ -9,7 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// GetBooking retrieves booking details by ID
 func GetBooking(c echo.Context) error {
 	bookingID := c.Param("id")
 	var booking models.Booking
@@ -18,7 +17,6 @@ func GetBooking(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, map[string]string{"message": "Booking not found"})
 	}
 
-	// Map the result to your custom response
 	bookingResponse := dto.GetBookingResponse{
 		BookingID:  booking.ID,
 		UserID:     booking.UserID,
