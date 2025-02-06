@@ -19,6 +19,8 @@ func GetUser(c echo.Context) error {
 
 	response := dto.UserResponse{
 		ID:      user.ID,
+		Name:    user.Name,
+		Email:   user.Email,
 		Balance: user.Balance,
 	}
 

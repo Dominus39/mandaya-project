@@ -3,6 +3,7 @@ package main
 import (
 	"user-service/config"
 	"user-service/internal/handler"
+	internal "user-service/internal/middleware"
 
 	//"user-service/internal/middleware"
 
@@ -41,6 +42,10 @@ func main() {
 	public := e.Group("")
 	public.POST("/users/register", handler.Register)
 	public.POST("/users/login", handler.LoginUser)
+
+	private := e.Group("")
+	private.Use(internal.CustomJwtMiddleware)
+	private.POST("/users/topup", handler.TopUpBalance)
 
 	service := e.Group("")
 	service.GET("/get_user/:id", handler.GetUser)

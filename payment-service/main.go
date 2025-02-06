@@ -40,6 +40,9 @@ func main() {
 	private := e.Group("")
 	private.Use(internal.CustomJwtMiddleware)
 	private.POST("/rooms/payment/:id", handler.PayBooking)
+	private.POST("/create_invoice", handler.CreateTopUpInvoice)
+
+	e.POST("/xendit_webhook", handler.XenditWebhook)
 
 	port := os.Getenv("PORT")
 	if port == "" {

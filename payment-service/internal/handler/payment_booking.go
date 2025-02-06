@@ -132,10 +132,6 @@ func PayBooking(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Failed to encode request data"})
 	}
 
-	// Print the request payload and URL for debugging
-	fmt.Printf("Request Payload: %s\n", jsonData)
-	fmt.Printf("Request URL: %s\n", updateBalanceURL)
-
 	bodyReader := bytes.NewBuffer(jsonData)
 	headers["Content-Type"] = "application/json"
 
