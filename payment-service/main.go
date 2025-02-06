@@ -41,6 +41,7 @@ func main() {
 	private.Use(internal.CustomJwtMiddleware)
 	private.POST("/rooms/payment/:id", handler.PayBooking)
 	private.POST("/create_invoice", handler.CreateTopUpInvoice)
+	private.POST("/get_price/:id", handler.GetPrice)
 
 	e.POST("/xendit_webhook", handler.XenditWebhook)
 
