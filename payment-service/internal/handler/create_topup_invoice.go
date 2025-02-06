@@ -23,7 +23,7 @@ func CreateTopUpInvoice(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid request parameters"})
 	}
 
-	userServiceURL := fmt.Sprintf("http://localhost:8080/get_user/%d", req.UserID)
+	userServiceURL := fmt.Sprintf("http://user-service:8080/get_user/%d", req.UserID)
 	headers := map[string]string{
 		"Authorization": c.Request().Header.Get("Authorization"),
 		"Content-Type":  "application/json",
