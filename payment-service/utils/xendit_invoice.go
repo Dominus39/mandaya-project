@@ -11,7 +11,6 @@ import (
 	"strconv"
 )
 
-// CreateInvoice creates an invoice via Xendit API
 func CreateInvoice(userID int, userName, userEmail string, amount float64) (*dto.InvoiceResponse, error) {
 	apiKey := os.Getenv("XENDIT_API_SECRET")
 	if apiKey == "" {
@@ -23,7 +22,6 @@ func CreateInvoice(userID int, userName, userEmail string, amount float64) (*dto
 		return nil, errors.New("xendit API credentials not set")
 	}
 
-	// Prepare request payload
 	bodyRequest := map[string]interface{}{
 		"external_id":      "topup-" + strconv.Itoa(userID),
 		"amount":           amount,
@@ -44,24 +42,18 @@ func CreateInvoice(userID int, userName, userEmail string, amount float64) (*dto
 
 	bodyReader := bytes.NewBuffer(jsonData)
 
-	// Set headers
 	encodedAPIKey := base64.StdEncoding.EncodeToString([]byte(apiKey + ":"))
 
-	// Set headers
 	headers := map[string]string{
 		"Content-Type":  "application/json",
 		"Authorization": "Basic " + encodedAPIKey, // Xendit requires Base64-encoded key
 	}
 
-	fmt.Printf("apiKey: %v\n", apiKey)
-
-	// Use RequestPOST for consistency
 	resBody, err := RequestPOST(apiUrl, headers, bodyReader)
 	if err != nil {
 		return nil, err
 	}
 
-	// Parse response
 	var resInvoice dto.InvoiceResponse
 	if err := json.Unmarshal(resBody, &resInvoice); err != nil {
 		return nil, err
